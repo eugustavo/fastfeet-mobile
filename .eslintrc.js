@@ -36,9 +36,17 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'no-undef': 'off',
     'no-param-reassign': 'off',
+    'import/extensions': 'off',
     'react/jsx-props-no-spreading': 'off',
     'no-console': ["error", {allow: ["tron"] }],
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
+  },
+  settings: {
+    "import/resolver": {
+      "babel-plugin-root-import": {
+        rootPathSuffix: "src"
+      }
+    }
   },
 };

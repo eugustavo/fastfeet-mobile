@@ -1,0 +1,36 @@
+import styled from 'styled-components/native';
+
+export const Container = styled.View`
+  flex: 1;
+  padding: 20px;
+`;
+
+export const Header = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const Infos = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+export const DeliverymanInfo = styled.View`
+  margin-left: 6px;
+`;
+
+export const Welcome = styled.Text`
+  font-size: 14px;
+  color: #666;
+  margin-left: 4px;
+`;
+
+export const DeliverymanName = styled.Text`
+  font-size: 24px;
+  font-weight: bold;
+  color: #444;
+  max-width: 200px;
+`;
+
+export const Logout = styled.TouchableOpacity``;
