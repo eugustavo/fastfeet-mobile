@@ -1,59 +1,100 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import UserAvatar from 'react-native-user-avatar';
 
-import { signOut } from '~/store/module/auth/actions';
+import Dashboard from './Dashboard';
+import DeliveriesDetails from './DeliveriesDetails';
+import ViewProblems from './ViewProblems';
+import ReportProblem from './ReportProblem';
+import ConfirmDelivery from './ConfirmDelivery';
 
-import {
-  Container,
-  Header,
-  Infos,
-  DeliverymanInfo,
-  Welcome,
-  DeliverymanName,
-  Logout,
-} from './styles';
+const Stack = createStackNavigator();
 
 const Deliveries = () => {
-  const dispatch = useDispatch();
-  const deliveryman = useSelector((state) => state.user.profile);
-
-  const handleLogout = () => {
-    dispatch(signOut());
-  };
+  const navigation = useNavigation();
 
   return (
-    <Container>
-      <Header>
-        <Infos>
-          {deliveryman.avatar ? (
-            <UserAvatar
-              size={68}
-              borderRadius={34}
-              name={deliveryman.name}
-              src={deliveryman.avatar.url}
-            />
-          ) : (
-            <UserAvatar
-              size={68}
-              name={deliveryman.name}
-              borderRadius={34}
-              bgColors={['#ccdcff']}
-            />
-          )}
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Dashboard"
+        component={Dashboard}
+        options={{
+          headerShown: false,
+        }}
+      />
 
-          <DeliverymanInfo>
-            <Welcome> Bem vindo de volta, </Welcome>
-            <DeliverymanName> {deliveryman.name} </DeliverymanName>
-          </DeliverymanInfo>
-        </Infos>
+      <Stack.Screen
+        name="DeliveriesDetails"
+        component={DeliveriesDetails}
+        options={{
+          title: 'Detalhes da encomenda',
+          headerTitleAlign: 'center',
+          headerTintColor: '#FFF',
+          headerLeftContainerStyle: { marginLeft: 20 },
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.navigate('Dashboard')}>
+              <Icon name="chevron-left" size={26} color="#FFF" />
+            </TouchableOpacity>
+          ),
+        }}
+      />
 
-        <Logout onPress={handleLogout}>
-          <Icon name="input" color="#E74040" size={26} />
-        </Logout>
-      </Header>
-    </Container>
+      <Stack.Screen
+        name="ViewProblems"
+        component={ViewProblems}
+        options={{
+          title: 'Visualizar problemas',
+          headerTitleAlign: 'center',
+          headerTintColor: '#FFF',
+          headerLeftContainerStyle: { marginLeft: 20 },
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('DeliveriesDetails')}
+            >
+              <Icon name="chevron-left" size={26} color="#FFF" />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+
+      <Stack.Screen
+        name="ReportProblem"
+        component={ReportProblem}
+        options={{
+          title: 'Informar problema',
+          headerTitleAlign: 'center',
+          headerTintColor: '#FFF',
+          headerLeftContainerStyle: { marginLeft: 20 },
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('DeliveriesDetails')}
+            >
+              <Icon name="chevron-left" size={26} color="#FFF" />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+
+      <Stack.Screen
+        name="ConfirmDelivery"
+        component={ConfirmDelivery}
+        options={{
+          title: 'Confirmar entrega',
+          headerTitleAlign: 'center',
+          headerTintColor: '#FFF',
+          headerLeftContainerStyle: { marginLeft: 20 },
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('DeliveriesDetails')}
+            >
+              <Icon name="chevron-left" size={26} color="#FFF" />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+    </Stack.Navigator>
   );
 };
 
