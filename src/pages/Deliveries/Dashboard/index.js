@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import UserAvatar from 'react-native-user-avatar';
 
+import api from '~/services/api';
 import { signOut } from '~/store/module/auth/actions';
+import Order from '~/components/Order';
 
 import {
   Container,
@@ -13,15 +16,85 @@ import {
   Welcome,
   DeliverymanName,
   Logout,
+  TitleAndActions,
+  Title,
+  Actions,
+  PendingButton,
+  PendingButtonText,
+  DeliveredButton,
+  DeliveredButtonText,
+  OrderList,
 } from './styles';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const deliveryman = useSelector((state) => state.user.profile);
+
+  const [pendingStatus, setPendingStatus] = useState(true);
+  const [deliveredStatus, setDeliveredStatus] = useState(false);
+  const [orders, setOrders] = useState([]);
+  // eslint-disable-next-line no-unused-vars
+  const [page, setPage] = useState(1);
+  // const [refresh, setRefresh] = useState(false);
+
+  useEffect(() => {
+    pendingOrders();
+  }, []);
+
+  const pendingOrders = async () => {
+    const response = await api.get(`deliveryman/${deliveryman.id}/deliveries`, {
+      params: {
+        page,
+      },
+    });
+    setOrders(response.data);
+  };
+  const deliveredOrders = async () => {};
+
+  const handlePending = () => {
+    if (!pendingStatus) {
+      setPendingStatus(true);
+      setDeliveredStatus(false);
+    }
+    pendingOrders();
+  };
+  const handleDelivered = () => {
+    if (!deliveredStatus) {
+      setDeliveredStatus(true);
+      setPendingStatus(false);
+    }
+    deliveredOrders();
+  };
+
+  const handleDetails = () => {
+    navigation.navigate('DeliveriesDetails', { data: orders });
+  };
 
   const handleLogout = () => {
     dispatch(signOut());
   };
+
+  // const loadMore = () => {
+  //   setPage(page + 1);
+  //   console.tron.log('LoadMore');
+  //   console.tron.log('Page: ', page);
+  //   console.tron.log(page);
+  //   if (pendingStatus) {
+  //     pendingOrders();
+  //   } else {
+  //     deliveredOders();
+  //   }
+  // };
+
+  // const refreshList = () => {
+  //   setRefreshing(true);
+  //   if (pendingStatus) {
+  //     pendingOrders();
+  //   } else {
+  //     deliveredOrders();
+  //   }
+  // };
 
   return (
     <Container>
@@ -53,6 +126,36 @@ const Dashboard = () => {
           <Icon name="input" color="#E74040" size={26} />
         </Logout>
       </Header>
+
+      <TitleAndActions>
+        <Title> Entregas </Title>
+
+        <Actions>
+          <PendingButton onPress={handlePending}>
+            <PendingButtonText atived={pendingStatus}>
+              Pendentes
+            </PendingButtonText>
+          </PendingButton>
+
+          <DeliveredButton onPress={handleDelivered}>
+            <DeliveredButtonText atived={deliveredStatus}>
+              Entregues
+            </DeliveredButtonText>
+          </DeliveredButton>
+        </Actions>
+      </TitleAndActions>
+
+      <OrderList
+        data={orders}
+        keyExtractor={(item) => String(item.id)}
+        // onEndReachedThreshold={0.2}
+        // onEndReached={loadMore}
+        // onRefresh={refreshList}
+        // refreshing={refreshing}
+        renderItem={({ item }) => (
+          <Order onDetails={handleDetails} data={item} />
+        )}
+      />
     </Container>
   );
 };

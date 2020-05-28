@@ -38,6 +38,7 @@ module.exports = {
     'no-param-reassign': 'off',
     'import/extensions': 'off',
     'react/jsx-props-no-spreading': 'off',
+    'no-use-before-define': 'off',
     'no-console': ["error", {allow: ["tron"] }],
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',

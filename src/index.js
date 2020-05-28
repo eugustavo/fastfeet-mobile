@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import 'react-native-gesture-handler';
 import './config/ReactotronConfig';
 
@@ -8,6 +9,8 @@ import { Provider } from 'react-redux';
 
 import Routes from '~/routes';
 import { store, persistor } from './store';
+
+console.disableYellowBox = true;
 
 const App = () => {
   return (
