@@ -67,8 +67,8 @@ const Dashboard = () => {
     deliveredOrders();
   };
 
-  const handleDetails = () => {
-    navigation.navigate('DeliveriesDetails', { data: orders });
+  const handleDetails = (order) => {
+    navigation.navigate('DeliveriesDetails', { data: order });
   };
 
   const handleLogout = () => {
@@ -153,7 +153,7 @@ const Dashboard = () => {
         // onRefresh={refreshList}
         // refreshing={refreshing}
         renderItem={({ item }) => (
-          <Order onDetails={handleDetails} data={item} />
+          <Order onDetails={() => handleDetails(item)} data={item} />
         )}
       />
     </Container>

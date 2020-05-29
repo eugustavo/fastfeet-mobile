@@ -16,7 +16,11 @@ const Deliveries = () => {
   const navigation = useNavigation();
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerTransparent: true,
+      }}
+    >
       <Stack.Screen
         name="Dashboard"
         component={Dashboard}
