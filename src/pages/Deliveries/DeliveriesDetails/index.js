@@ -57,7 +57,7 @@ const DeliveriesDetails = ({ route }) => {
   };
 
   const handleViewProblem = () => {
-    navigation.navigate('ViewProblems');
+    navigation.navigate('ViewProblems', { id: order.id });
   };
 
   const handleConfirmDelivery = () => {
