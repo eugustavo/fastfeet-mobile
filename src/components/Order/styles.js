@@ -3,7 +3,6 @@ import styled from 'styled-components/native';
 export const Container = styled.View`
   flex: 1;
   height: 180px;
-  width: 340px;
 
   border-radius: 4px;
   margin-bottom: 50px;
@@ -33,6 +32,8 @@ export const Details = styled.View`
   height: 65px;
   margin-top: 20px;
   background: #f8f9fd;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
 `;
 
 export const DateDetails = styled.View`
@@ -67,4 +68,8 @@ export const ViewOrderDetailsText = styled.Text`
   font-size: 14px;
   font-weight: bold;
   color: #7159c1;
+`;
+
+export const StepIndicatorPosition = styled.View`
+  padding: 0 10px;
 `;

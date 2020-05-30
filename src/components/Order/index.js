@@ -16,6 +16,7 @@ import {
   City,
   ViewOrderDetails,
   ViewOrderDetailsText,
+  StepIndicatorPosition,
 } from './styles';
 
 const Order = ({ data, onDetails }) => {
@@ -68,13 +69,14 @@ const Order = ({ data, onDetails }) => {
         <OrderTitle> {data.product} </OrderTitle>
       </Header>
 
-      <StepIndicator
-        customStyles={customStyles}
-        currentPosition={orderStatus}
-        labels={labels}
-        stepCount={3}
-        useNativeDriver
-      />
+      <StepIndicatorPosition>
+        <StepIndicator
+          customStyles={customStyles}
+          currentPosition={orderStatus}
+          labels={labels}
+          stepCount={3}
+        />
+      </StepIndicatorPosition>
 
       <Details>
         <DateDetails>

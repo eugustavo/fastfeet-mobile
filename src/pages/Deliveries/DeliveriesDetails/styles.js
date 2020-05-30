@@ -2,11 +2,10 @@ import styled from 'styled-components/native';
 import { RectButton } from 'react-native-gesture-handler';
 
 export const CardRecipient = styled.View`
-  width: 350px;
-  height: 220px;
+  width: 90%;
 
   background: #fff;
-  padding: 10px;
+  padding: 15px;
   border-radius: 6px;
   margin-top: 90px;
 `;
@@ -39,11 +38,10 @@ export const CardInfo = styled.Text`
 `;
 
 export const CardStatus = styled.View`
-  width: 350px;
-  height: 160px;
+  width: 90%;
 
   background: #fff;
-  padding: 10px;
+  padding: 15px;
   border-radius: 6px;
   margin-top: 15px;
 `;
@@ -57,12 +55,13 @@ export const CardDate = styled.View`
 export const Date = styled.View``;
 
 export const CardActions = styled.View`
-  width: 350px;
-  height: 100px;
+  width: 90%;
+  height: 90;
+
   flex-direction: row;
   justify-content: space-around;
 
-  background: #f8f9fd;
+  background: #ebedf7;
   border-radius: 6px;
   margin-top: 15px;
 `;

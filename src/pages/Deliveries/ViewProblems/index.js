@@ -1,10 +1,11 @@
 import React from 'react';
-import { View } from 'react-native';
+
+import HeaderBackgroundColor from '~/components/HeaderBackgroundColor';
 
 // import { Container } from './styles';
 
 const ViewProblems = () => {
-  return <View />;
+  return <HeaderBackgroundColor />;
 };
 
 export default ViewProblems;

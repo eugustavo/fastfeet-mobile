@@ -79,5 +79,4 @@ export const DeliveredButtonText = styled.Text`
 
 export const OrderList = styled.FlatList.attrs({
   showsVerticalScrollIndicator: false,
-  contentContainerStyle: { padding: 5 },
 })``;

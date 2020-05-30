@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { format, parseISO } from 'date-fns';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -21,9 +22,7 @@ import {
 
 const DeliveriesDetails = ({ route }) => {
   const order = route.params.data;
-  const teste = () => {
-    console.tron.log(order);
-  };
+  const navigation = useNavigation();
 
   const statusOrder = useMemo(
     () =>
@@ -52,6 +51,18 @@ const DeliveriesDetails = ({ route }) => {
         : '--/--/--',
     [order.end_date]
   );
+
+  const handleReportProblem = () => {
+    navigation.navigate('ReportProblem', { id: order.id });
+  };
+
+  const handleViewProblem = () => {
+    navigation.navigate('ViewProblems');
+  };
+
+  const handleConfirmDelivery = () => {
+    navigation.navigate('ConfirmDelivery', { id: order.id });
+  };
 
   return (
     <HeaderBackgroundColor>
@@ -102,17 +113,17 @@ const DeliveriesDetails = ({ route }) => {
       </CardStatus>
 
       <CardActions>
-        <ButtonActions onPress={teste}>
+        <ButtonActions onPress={handleReportProblem}>
           <Icon name="cancel" color="#E74040" size={24} />
           <ButtonText> Informar Problema </ButtonText>
         </ButtonActions>
 
-        <ButtonActions onPress={() => {}}>
+        <ButtonActions onPress={handleViewProblem}>
           <Icon name="information-outline" color="#E7BA40" size={24} />
           <ButtonText> Visualizar Problemas </ButtonText>
         </ButtonActions>
 
-        <ButtonActions onPress={() => {}}>
+        <ButtonActions onPress={handleConfirmDelivery}>
           <Icon name="check-circle-outline" color="#7159c1" size={24} />
           <ButtonText> Confirmar Entrega </ButtonText>
         </ButtonActions>
