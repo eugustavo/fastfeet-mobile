@@ -1,8 +1,12 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable react/prop-types */
 import React, { useMemo } from 'react';
+import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { format, parseISO } from 'date-fns';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import api from '~/services/api';
 import HeaderBackgroundColor from '~/components/HeaderBackgroundColor';
 
 import {
@@ -14,7 +18,7 @@ import {
   CardInfo,
   CardStatus,
   CardDate,
-  Date,
+  DateView,
   CardActions,
   ButtonActions,
   ButtonText,
@@ -64,6 +68,36 @@ const DeliveriesDetails = ({ route }) => {
     navigation.navigate('ConfirmDelivery', { id: order.id });
   };
 
+  const handleWithdraw = async () => {
+    console.tron.log(`/order/${order.id}/status`);
+    console.tron.log(new Date());
+    try {
+      const response = await api.put(`/order/${order.id}/status`, {
+        start_date: new Date(),
+      });
+
+      console.tron.log(response);
+      if (response.status === 200) {
+        Alert.alert(
+          'Encomenda retirada',
+          'A encomenda foi retirada com sucesso!'
+        );
+      } else {
+        Alert.alert(
+          'Erro',
+          'Não foi possível retirar a encomenda! Tente novamente mais tarde'
+        );
+      }
+    } catch (err) {
+      console.tron.log(err);
+      Alert.alert(
+        'Erro',
+        'Não foi possível retirar a encomenda! Tente novamente mais tarde'
+      );
+    }
+    navigation.goBack();
+  };
+
   return (
     <HeaderBackgroundColor>
       <CardRecipient>
@@ -77,10 +111,9 @@ const DeliveriesDetails = ({ route }) => {
 
           <CardLabel> Endereço de entrega </CardLabel>
           <CardInfo>
-            {' '}
-            {order.recipient.street}, {order.recipient.street_number},{' '}
-            {order.recipient.city} - {order.recipient.state},{' '}
-            {order.recipient.zipcode}{' '}
+            {order.recipient.street}, {order.recipient.street_number},
+            {order.recipient.city} - {order.recipient.state},
+            {order.recipient.zipcode}
           </CardInfo>
 
           <CardLabel> Produto </CardLabel>
@@ -99,34 +132,43 @@ const DeliveriesDetails = ({ route }) => {
           <CardInfo> {statusOrder} </CardInfo>
 
           <CardDate>
-            <Date>
+            <DateView>
               <CardLabel> Data de retirada </CardLabel>
               <CardInfo> {startDateFormatted} </CardInfo>
-            </Date>
+            </DateView>
 
-            <Date>
+            <DateView>
               <CardLabel> Data de entrega </CardLabel>
               <CardInfo> {endDateFormatted} </CardInfo>
-            </Date>
+            </DateView>
           </CardDate>
         </CardDetails>
       </CardStatus>
 
       <CardActions>
-        <ButtonActions onPress={handleReportProblem}>
-          <Icon name="cancel" color="#E74040" size={24} />
-          <ButtonText> Informar Problema </ButtonText>
-        </ButtonActions>
+        {statusOrder === 'Pendente' ? (
+          <ButtonActions onPress={handleWithdraw}>
+            <Icon name="cube-send" size={24} color="#7159c1" />
+            <ButtonText>Retirar Encomenda</ButtonText>
+          </ButtonActions>
+        ) : (
+          <>
+            <ButtonActions onPress={handleReportProblem}>
+              <Icon name="cancel" color="#E74040" size={24} />
+              <ButtonText> Informar Problema </ButtonText>
+            </ButtonActions>
 
-        <ButtonActions onPress={handleViewProblem}>
-          <Icon name="information-outline" color="#E7BA40" size={24} />
-          <ButtonText> Visualizar Problemas </ButtonText>
-        </ButtonActions>
+            <ButtonActions onPress={handleViewProblem}>
+              <Icon name="information-outline" color="#E7BA40" size={24} />
+              <ButtonText> Visualizar Problemas </ButtonText>
+            </ButtonActions>
 
-        <ButtonActions onPress={handleConfirmDelivery}>
-          <Icon name="check-circle-outline" color="#7159c1" size={24} />
-          <ButtonText> Confirmar Entrega </ButtonText>
-        </ButtonActions>
+            <ButtonActions onPress={handleConfirmDelivery}>
+              <Icon name="check-circle-outline" color="#7159c1" size={24} />
+              <ButtonText> Confirmar Entrega </ButtonText>
+            </ButtonActions>
+          </>
+        )}
       </CardActions>
     </HeaderBackgroundColor>
   );

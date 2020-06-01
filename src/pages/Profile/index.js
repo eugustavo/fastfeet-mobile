@@ -17,6 +17,7 @@ import {
 const Profile = () => {
   const dispatch = useDispatch();
   const deliveryman = useSelector((state) => state.user.profile);
+  console.tron.log(deliveryman);
 
   const dateFormatted = useMemo(
     () => format(parseISO(deliveryman.created_at), 'dd/MM/yyyy'),

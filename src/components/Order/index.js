@@ -23,8 +23,11 @@ const Order = ({ data, onDetails }) => {
   const [orderStatus, setOrderStatus] = useState(0);
 
   useEffect(() => {
-    if (data.start_date) {
+    if (!data.end_date && data.start_date) {
       setOrderStatus(1);
+    }
+    if (data.end_date) {
+      setOrderStatus(2);
     }
   }, []);
 
@@ -62,7 +65,13 @@ const Order = ({ data, onDetails }) => {
     <Container>
       <Header>
         <Icon
-          name={orderStatus === 0 ? 'truck' : 'truck-fast'}
+          name={
+            orderStatus === 0
+              ? 'truck'
+              : orderStatus === 1
+              ? 'truck-fast'
+              : 'truck-check'
+          }
           size={26}
           color="#7159c1"
         />

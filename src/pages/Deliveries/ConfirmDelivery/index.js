@@ -1,107 +1,113 @@
-import React, { useEffect, useRef } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  PermissionsAndroid,
-} from 'react-native';
+/* eslint-disable camelcase */
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { PermissionsAndroid, Alert } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import api from '~/services/api';
 import HeaderBackgroundColor from '~/components/HeaderBackgroundColor';
 
-// import { Container } from './styles';
+import {
+  Container,
+  Camera,
+  Content,
+  TakePicture,
+  SubmitButton,
+  SubmitButtonText,
+} from './styles';
 
-const ConfirmDelivery = () => {
-  let cameraRef = useRef();
+const ConfirmDelivery = ({ route }) => {
+  const navigation = useNavigation();
+  const { id } = route.params;
+
+  const [camera, setCamera] = useState(null);
+  const [fileName, setFileName] = useState('');
+  const [path, setPath] = useState(null);
 
   useEffect(() => {
     async function permissionRequest() {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-        {
-          title: 'Cool Photo App Camera Permission',
-          message:
-            'Cool Photo App needs access to your camera ' +
-            'so you can take awesome pictures.',
-        }
+      await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
+      await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
       );
-
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.tron.log('You can use the camera');
-      } else {
-        console.tron.log('Camera permission denied');
-      }
+      await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+      );
     }
     permissionRequest();
   }, []);
 
   const takePicture = async () => {
-    if (cameraRef) {
-      const options = { quality: 0.7, base64: true };
-      const data = await cameraRef.takePictureAsync(options);
-      console.tron.log(data.uri);
+    if (camera) {
+      const options = { quality: 0.5, base64: true };
+      const data = await camera.takePictureAsync(options);
+
+      setFileName(data.uri.split(/\D/).join(''));
+      setPath(data.uri);
     }
+  };
+
+  const handleSubmit = async () => {
+    console.tron.log(fileName);
+    console.tron.log(path);
+    try {
+      const data = new FormData();
+
+      data.append('file', {
+        type: 'image/jpeg',
+        name: `${fileName}.jpg`,
+        uri: path,
+      });
+
+      const pictureResponse = await api.post('files', data);
+      const signature_id = pictureResponse.data.id;
+
+      const confirm = await api.put(`/order/${id}/status`, {
+        end_date: new Date(),
+        signature_id,
+      });
+
+      if (confirm.status === 200) {
+        Alert.alert('Entrega concluída', 'Entrega realizada com sucesso!');
+      } else {
+        Alert.alert(
+          'Erro',
+          'Houve um problema com envio da assinatura! Tente novamente mais tarde.'
+        );
+      }
+    } catch (err) {
+      console.tron.log(err);
+      Alert.alert(
+        'Erro',
+        'Houve um problema com envio da assinatura! Tente novamente mais tarde.'
+      );
+    }
+    navigation.goBack();
   };
 
   return (
     <HeaderBackgroundColor>
-      <View style={styles.container}>
-        <RNCamera
-          ref={(ref) => {
-            cameraRef = ref;
-          }}
+      <Container>
+        <Camera
+          ref={(ref) => setCamera(ref)}
           captureAudio={false}
-          style={styles.preview}
           type={RNCamera.Constants.Type.back}
           flashMode={RNCamera.Constants.FlashMode.on}
-          androidCameraPermissionOptions={{
-            title: 'Permission to use camera',
-            message: 'We need your permission to use your camera',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',
-          }}
-          androidRecordAudioPermissionOptions={{
-            title: 'Permission to use audio recording',
-            message: 'We need your permission to use your audio',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',
-          }}
         />
-        <View
-          style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}
-        >
-          <TouchableOpacity onPress={takePicture} style={styles.capture}>
+
+        <Content>
+          <TakePicture onPress={takePicture}>
             <Icon name="camera" size={42} color="rgba(255, 255, 255, 0.6)" />
-          </TouchableOpacity>
-        </View>
-      </View>
+          </TakePicture>
+        </Content>
+      </Container>
+
+      <SubmitButton onPress={handleSubmit}>
+        <SubmitButtonText>Enviar</SubmitButtonText>
+      </SubmitButton>
     </HeaderBackgroundColor>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-
-    width: 350,
-    height: 450,
-    borderRadius: 6,
-    marginTop: 100,
-    position: 'absolute',
-  },
-  preview: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    marginTop: 75,
-    borderRadius: 6,
-  },
-  capture: {
-    alignSelf: 'center',
-    margin: 20,
-  },
-});
 
 export default ConfirmDelivery;

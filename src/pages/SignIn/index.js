@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { ActivityIndicator } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { signInRequest } from '~/store/module/auth/actions';
 
@@ -15,6 +16,7 @@ import logo from '~/assets/logo.png';
 
 const SignIn = () => {
   const dispatch = useDispatch();
+  const loading = useSelector((state) => state.auth.loading);
   const [deliverymanID, setDeliverymanID] = useState('');
 
   const handleSubmit = async () => {
@@ -36,7 +38,11 @@ const SignIn = () => {
         onSubmitEditing={handleSubmit}
       />
       <SubmitButton onPress={handleSubmit}>
-        <SubmitButtonText> Entrar no Sistema </SubmitButtonText>
+        {loading ? (
+          <ActivityIndicator size={26} color="#fff" />
+        ) : (
+          <SubmitButtonText> Entrar no Sistema </SubmitButtonText>
+        )}
       </SubmitButton>
     </Container>
   );

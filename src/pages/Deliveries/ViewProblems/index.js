@@ -17,7 +17,7 @@ const ViewProblems = ({ route }) => {
       setProblems(response.data);
     };
     loadProblems();
-  }, [id, problems]);
+  }, []);
 
   return (
     <HeaderBackgroundColor>

@@ -7,7 +7,6 @@ export const CardDescriptionProblem = styled.View`
   width: 90%;
   height: 350px;
 
-  margin-top: 80px;
   border-radius: 6px;
   background: #fff;
   justify-content: flex-start;

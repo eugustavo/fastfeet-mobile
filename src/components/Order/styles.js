@@ -41,7 +41,7 @@ export const DateDetails = styled.View`
 `;
 
 export const TitleDetail = styled.Text`
-  font-size: 10px;
+  font-size: 12px;
   font-weight: bold;
   color: #999;
 `;
@@ -65,7 +65,7 @@ export const City = styled.Text`
 export const ViewOrderDetails = styled.TouchableOpacity``;
 
 export const ViewOrderDetailsText = styled.Text`
-  font-size: 14px;
+  font-size: 15px;
   font-weight: bold;
   color: #7159c1;
 `;

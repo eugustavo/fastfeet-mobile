@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, useCallback } from 'react';
+import { ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -34,23 +36,34 @@ const Dashboard = () => {
   const [pendingStatus, setPendingStatus] = useState(true);
   const [deliveredStatus, setDeliveredStatus] = useState(false);
   const [orders, setOrders] = useState([]);
-  // eslint-disable-next-line no-unused-vars
+  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  // const [refresh, setRefresh] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     pendingOrders();
   }, []);
 
   const pendingOrders = async () => {
+    setLoading(true);
     const response = await api.get(`deliveryman/${deliveryman.id}/deliveries`, {
       params: {
         page,
       },
     });
     setOrders(response.data);
+    setLoading(false);
   };
-  const deliveredOrders = async () => {};
+  const deliveredOrders = async () => {
+    setLoading(true);
+    const response = await api.get(`/deliveryman/${deliveryman.id}/handed`, {
+      params: {
+        page,
+      },
+    });
+    setOrders(response.data);
+    setLoading(false);
+  };
 
   const handlePending = () => {
     if (!pendingStatus) {
@@ -145,17 +158,21 @@ const Dashboard = () => {
         </Actions>
       </TitleAndActions>
 
-      <OrderList
-        data={orders}
-        keyExtractor={(item) => String(item.id)}
-        // onEndReachedThreshold={0.2}
-        // onEndReached={loadMore}
-        // onRefresh={refreshList}
-        // refreshing={refreshing}
-        renderItem={({ item }) => (
-          <Order onDetails={() => handleDetails(item)} data={item} />
-        )}
-      />
+      {loading ? (
+        <ActivityIndicator size={42} color="#7159c1" />
+      ) : (
+        <OrderList
+          data={orders}
+          keyExtractor={(item) => String(item.id)}
+          // onEndReachedThreshold={0.2}
+          // onEndReached={loadMore}
+          // onRefresh={refreshList}
+          // refreshing={refreshing}
+          renderItem={({ item }) => (
+            <Order onDetails={() => handleDetails(item)} data={item} />
+          )}
+        />
+      )}
     </Container>
   );
 };

@@ -7,7 +7,7 @@ export const CardRecipient = styled.View`
   background: #fff;
   padding: 15px;
   border-radius: 6px;
-  margin-top: 90px;
+  /* margin-top: 90px; */
 `;
 
 export const CardHeader = styled.View`
@@ -52,7 +52,7 @@ export const CardDate = styled.View`
   justify-content: space-between;
 `;
 
-export const Date = styled.View``;
+export const DateView = styled.View``;
 
 export const CardActions = styled.View`
   width: 90%;
@@ -67,7 +67,7 @@ export const CardActions = styled.View`
 `;
 
 export const ButtonActions = styled(RectButton)`
-  width: 100px;
+  width: 115px;
   align-items: center;
   justify-content: center;
 `;
