@@ -37,32 +37,28 @@ const Dashboard = () => {
   const [deliveredStatus, setDeliveredStatus] = useState(false);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [refresh, setRefresh] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     pendingOrders();
   }, []);
 
-  const pendingOrders = async () => {
+  const pendingOrders = useCallback(async () => {
     setLoading(true);
-    const response = await api.get(`deliveryman/${deliveryman.id}/deliveries`, {
-      params: {
-        page,
-      },
-    });
+    const response = await api.get(`deliveryman/${deliveryman.id}/deliveries`);
+
     setOrders(response.data);
     setLoading(false);
-  };
+    setRefreshing(false);
+  }, [deliveryman.id]);
+
   const deliveredOrders = async () => {
     setLoading(true);
-    const response = await api.get(`/deliveryman/${deliveryman.id}/handed`, {
-      params: {
-        page,
-      },
-    });
+    const response = await api.get(`/deliveryman/${deliveryman.id}/handed`);
+
     setOrders(response.data);
     setLoading(false);
+    setRefreshing(false);
   };
 
   const handlePending = () => {
@@ -88,26 +84,14 @@ const Dashboard = () => {
     dispatch(signOut());
   };
 
-  // const loadMore = () => {
-  //   setPage(page + 1);
-  //   console.tron.log('LoadMore');
-  //   console.tron.log('Page: ', page);
-  //   console.tron.log(page);
-  //   if (pendingStatus) {
-  //     pendingOrders();
-  //   } else {
-  //     deliveredOders();
-  //   }
-  // };
-
-  // const refreshList = () => {
-  //   setRefreshing(true);
-  //   if (pendingStatus) {
-  //     pendingOrders();
-  //   } else {
-  //     deliveredOrders();
-  //   }
-  // };
+  const refreshList = () => {
+    setRefreshing(true);
+    if (pendingStatus) {
+      pendingOrders();
+    } else {
+      deliveredOrders();
+    }
+  };
 
   return (
     <Container>
@@ -164,10 +148,8 @@ const Dashboard = () => {
         <OrderList
           data={orders}
           keyExtractor={(item) => String(item.id)}
-          // onEndReachedThreshold={0.2}
-          // onEndReached={loadMore}
-          // onRefresh={refreshList}
-          // refreshing={refreshing}
+          onRefresh={refreshList}
+          refreshing={refreshing}
           renderItem={({ item }) => (
             <Order onDetails={() => handleDetails(item)} data={item} />
           )}

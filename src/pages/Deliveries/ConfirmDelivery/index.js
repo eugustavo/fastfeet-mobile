@@ -83,7 +83,7 @@ const ConfirmDelivery = ({ route }) => {
         'Houve um problema com envio da assinatura! Tente novamente mais tarde.'
       );
     }
-    navigation.goBack();
+    navigation.navigate('Dashboard');
   };
 
   return (

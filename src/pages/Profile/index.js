@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { parseISO, format } from 'date-fns';
 import { useSelector, useDispatch } from 'react-redux';
 import UserAvatar from 'react-native-user-avatar';
@@ -15,6 +16,7 @@ import {
 } from './styles';
 
 const Profile = () => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const deliveryman = useSelector((state) => state.user.profile);
   console.tron.log(deliveryman);
@@ -26,6 +28,10 @@ const Profile = () => {
 
   const handleLogout = () => {
     dispatch(signOut());
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Entregas' }],
+    });
   };
 
   return (

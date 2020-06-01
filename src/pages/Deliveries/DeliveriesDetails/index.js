@@ -163,7 +163,10 @@ const DeliveriesDetails = ({ route }) => {
               <ButtonText> Visualizar Problemas </ButtonText>
             </ButtonActions>
 
-            <ButtonActions onPress={handleConfirmDelivery}>
+            <ButtonActions
+              onPress={handleConfirmDelivery}
+              disabled={statusOrder === 'Entregue'}
+            >
               <Icon name="check-circle-outline" color="#7159c1" size={24} />
               <ButtonText> Confirmar Entrega </ButtonText>
             </ButtonActions>

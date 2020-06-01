@@ -7,7 +7,6 @@ export const CardRecipient = styled.View`
   background: #fff;
   padding: 15px;
   border-radius: 6px;
-  /* margin-top: 90px; */
 `;
 
 export const CardHeader = styled.View`
@@ -70,6 +69,7 @@ export const ButtonActions = styled(RectButton)`
   width: 115px;
   align-items: center;
   justify-content: center;
+  display: ${(props) => (props.disabled ? 'none' : 'flex')};
 `;
 
 export const ButtonText = styled.Text`
