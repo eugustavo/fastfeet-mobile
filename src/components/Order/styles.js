@@ -62,7 +62,9 @@ export const City = styled.Text`
   color: #444;
 `;
 
-export const ViewOrderDetails = styled.TouchableOpacity``;
+export const ViewOrderDetails = styled.TouchableOpacity`
+  padding: 20px 0;
+`;
 
 export const ViewOrderDetailsText = styled.Text`
   font-size: 15px;

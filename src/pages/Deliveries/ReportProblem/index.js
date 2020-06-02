@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useNavigation } from '@react-navigation/native';
 import { Alert } from 'react-native';
 
@@ -63,6 +64,14 @@ const ReportProblem = ({ route }) => {
       </SubmitButton>
     </HeaderBackgroundColor>
   );
+};
+
+ReportProblem.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.number,
+    }),
+  }).isRequired,
 };
 
 export default ReportProblem;

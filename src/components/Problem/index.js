@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import PropTypes from 'prop-types';
 import { format, parseISO } from 'date-fns';
 
 import ProblemModal from '~/components/ProblemModal';
@@ -31,6 +32,13 @@ const Problem = ({ data }) => {
       )}
     </>
   );
+};
+
+Problem.propTypes = {
+  data: PropTypes.shape({
+    created_at: PropTypes.string,
+    description: PropTypes.string,
+  }).isRequired,
 };
 
 export default Problem;

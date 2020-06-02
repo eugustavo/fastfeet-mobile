@@ -1,5 +1,6 @@
-/* eslint-disable react/prop-types */
+/* eslint-disable no-nested-ternary */
 import React, { useState, useMemo, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { format, parseISO } from 'date-fns';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import StepIndicator from 'react-native-step-indicator';
@@ -29,7 +30,7 @@ const Order = ({ data, onDetails }) => {
     if (data.end_date) {
       setOrderStatus(2);
     }
-  }, []);
+  }, [data.end_date, data.start_date]);
 
   const labels = ['Aguardando Retirada', 'Retirada', 'Entregue'];
   const customStyles = {
@@ -104,6 +105,19 @@ const Order = ({ data, onDetails }) => {
       </Details>
     </Container>
   );
+};
+
+Order.propTypes = {
+  onDetails: PropTypes.func.isRequired,
+  data: PropTypes.shape({
+    product: PropTypes.string,
+    start_date: PropTypes.string,
+    end_date: PropTypes.string,
+    updatedAt: PropTypes.string,
+    recipient: PropTypes.shape({
+      city: PropTypes.string,
+    }),
+  }).isRequired,
 };
 
 export default Order;

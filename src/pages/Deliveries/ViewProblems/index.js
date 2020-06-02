@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
 import api from '~/services/api';
 import HeaderBackgroundColor from '~/components/HeaderBackgroundColor';
@@ -17,7 +18,7 @@ const ViewProblems = ({ route }) => {
       setProblems(response.data);
     };
     loadProblems();
-  }, []);
+  }, [id]);
 
   return (
     <HeaderBackgroundColor>
@@ -30,6 +31,14 @@ const ViewProblems = ({ route }) => {
       </Container>
     </HeaderBackgroundColor>
   );
+};
+
+ViewProblems.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.number,
+    }),
+  }).isRequired,
 };
 
 export default ViewProblems;

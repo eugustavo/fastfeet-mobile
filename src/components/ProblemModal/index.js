@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import {
   Container,
@@ -21,6 +22,11 @@ const ProblemModal = ({ descriptionProblem, toggleModal }) => {
       </ToggleButton>
     </Container>
   );
+};
+
+ProblemModal.propTypes = {
+  descriptionProblem: PropTypes.string.isRequired,
+  toggleModal: PropTypes.func.isRequired,
 };
 
 export default ProblemModal;

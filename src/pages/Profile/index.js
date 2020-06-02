@@ -27,11 +27,11 @@ const Profile = () => {
   );
 
   const handleLogout = () => {
-    dispatch(signOut());
     navigation.reset({
       index: 0,
       routes: [{ name: 'Entregas' }],
     });
+    dispatch(signOut());
   };
 
   return (
