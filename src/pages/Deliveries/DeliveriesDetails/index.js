@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
-/* eslint-disable react/prop-types */
 import React, { useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { format, parseISO } from 'date-fns';
@@ -175,6 +175,27 @@ const DeliveriesDetails = ({ route }) => {
       </CardActions>
     </HeaderBackgroundColor>
   );
+};
+
+DeliveriesDetails.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      data: PropTypes.shape({
+        product: PropTypes.string,
+        start_date: PropTypes.string,
+        end_date: PropTypes.string,
+        canceled_at: PropTypes.string,
+        recipient: PropTypes.shape({
+          name: PropTypes.string,
+          street: PropTypes.string,
+          street_number: PropTypes.number,
+          city: PropTypes.string,
+          state: PropTypes.string,
+          zipcode: PropTypes.string,
+        }),
+      }),
+    }),
+  }).isRequired,
 };
 
 export default DeliveriesDetails;

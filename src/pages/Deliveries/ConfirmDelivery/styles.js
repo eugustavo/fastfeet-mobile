@@ -54,3 +54,31 @@ export const SubmitButtonText = styled.Text`
   font-weight: bold;
   color: #fff;
 `;
+
+export const PicturePreview = styled.View`
+  flex: 1;
+  height: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 6px;
+`;
+
+export const Preview = styled.Image`
+  height: 100%;
+  width: 100%;
+  flex: 1;
+`;
+
+export const ClosePreview = styled.TouchableOpacity`
+  align-self: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 32px;
+  background: rgba(0, 0, 0, 0.5);
+
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+  bottom: 20px;
+`;

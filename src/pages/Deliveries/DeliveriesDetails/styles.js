@@ -66,7 +66,7 @@ export const CardActions = styled.View`
 `;
 
 export const ButtonActions = styled(RectButton)`
-  width: 115px;
+  width: 100px;
   align-items: center;
   justify-content: center;
   display: ${(props) => (props.disabled ? 'none' : 'flex')};

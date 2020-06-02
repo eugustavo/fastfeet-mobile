@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useNavigation } from '@react-navigation/native';
 import { PermissionsAndroid, Alert } from 'react-native';
 import { RNCamera } from 'react-native-camera';
@@ -15,6 +16,9 @@ import {
   TakePicture,
   SubmitButton,
   SubmitButtonText,
+  PicturePreview,
+  Preview,
+  ClosePreview,
 } from './styles';
 
 const ConfirmDelivery = ({ route }) => {
@@ -22,18 +26,11 @@ const ConfirmDelivery = ({ route }) => {
   const { id } = route.params;
 
   const [camera, setCamera] = useState(null);
-  const [fileName, setFileName] = useState('');
-  const [path, setPath] = useState(null);
+  const [picture, setPicture] = useState(null);
 
   useEffect(() => {
     async function permissionRequest() {
       await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
-      await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
-      );
-      await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-      );
     }
     permissionRequest();
   }, []);
@@ -42,22 +39,22 @@ const ConfirmDelivery = ({ route }) => {
     if (camera) {
       const options = { quality: 0.5, base64: true };
       const data = await camera.takePictureAsync(options);
-
-      setFileName(data.uri.split(/\D/).join(''));
-      setPath(data.uri);
+      setPicture(data.uri);
     }
   };
 
+  const handleCancel = () => {
+    setPicture(null);
+  };
+
   const handleSubmit = async () => {
-    console.tron.log(fileName);
-    console.tron.log(path);
     try {
       const data = new FormData();
 
       data.append('file', {
+        uri: picture,
         type: 'image/jpeg',
-        name: `${fileName}.jpg`,
-        uri: path,
+        name: 'signature.jpg',
       });
 
       const pictureResponse = await api.post('files', data);
@@ -89,18 +86,34 @@ const ConfirmDelivery = ({ route }) => {
   return (
     <HeaderBackgroundColor>
       <Container>
-        <Camera
-          ref={(ref) => setCamera(ref)}
-          captureAudio={false}
-          type={RNCamera.Constants.Type.back}
-          flashMode={RNCamera.Constants.FlashMode.on}
-        />
-
-        <Content>
-          <TakePicture onPress={takePicture}>
-            <Icon name="camera" size={42} color="rgba(255, 255, 255, 0.6)" />
-          </TakePicture>
-        </Content>
+        {picture ? (
+          <>
+            <PicturePreview>
+              <Preview source={{ uri: picture }} />
+            </PicturePreview>
+            <ClosePreview onPress={handleCancel}>
+              <Icon name="file-cancel-outline" size={42} color="#fff" />
+            </ClosePreview>
+          </>
+        ) : (
+          <>
+            <Camera
+              ref={(ref) => setCamera(ref)}
+              captureAudio={false}
+              type={RNCamera.Constants.Type.back}
+              flashMode={RNCamera.Constants.FlashMode.on}
+            />
+            <Content>
+              <TakePicture onPress={takePicture}>
+                <Icon
+                  name="camera"
+                  size={42}
+                  color="rgba(255, 255, 255, 0.6)"
+                />
+              </TakePicture>
+            </Content>
+          </>
+        )}
       </Container>
 
       <SubmitButton onPress={handleSubmit}>
@@ -108,6 +121,14 @@ const ConfirmDelivery = ({ route }) => {
       </SubmitButton>
     </HeaderBackgroundColor>
   );
+};
+
+ConfirmDelivery.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.number,
+    }),
+  }).isRequired,
 };
 
 export default ConfirmDelivery;
