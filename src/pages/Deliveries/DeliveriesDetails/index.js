@@ -111,8 +111,8 @@ const DeliveriesDetails = ({ route }) => {
 
           <CardLabel> Endereço de entrega </CardLabel>
           <CardInfo>
-            {order.recipient.street}, {order.recipient.street_number},
-            {order.recipient.city} - {order.recipient.state},
+            {order.recipient.street}, {order.recipient.street_number},{' '}
+            {order.recipient.city} - {order.recipient.state},{' '}
             {order.recipient.zipcode}
           </CardInfo>
 
